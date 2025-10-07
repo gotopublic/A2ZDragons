@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Drago Rental</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" href="#" type="image/x-icon">
+        <link href="css/datatables.css" rel="stylesheet" type="text/css"/>
+        <link href="css/jquery-ui.css" rel="stylesheet" type="text/css"/>
+        <link href="css/style.css" rel="stylesheet" type="text/css"/>
+
+        <script src="js/datatables.js" type="text/javascript" charset="utf-8"></script>
+        <script src="js/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="js/Constants.js" type="text/javascript" charset="utf-8"></script>
+        <script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+    </head>
+    <body>
+        <div id="top">
+            <input id="wallet" type="text" placeholder="Paste your wallet here">
+            <input type="button" id="rentalCheckButton" value="Rental Check"/>
+            <input type="button" id="optionsButton" value="Rental Options"/>
+        </div>
+        <table id="dragoDatatable" class="display nowrap" cellspacing="0" style="width:100%; margin-bottom:2rem;"></table>
+        <div id="popupMessage" style="display:none"></div>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                let rentalCheck = document.getElementById("rentalCheckButton");
+                let options = document.getElementById("optionsButton");
+
+                fillWallet();
+                runDragoDatatable("wallet");
+                rentalCheck.addEventListener("click", function () {
+                    runDragoDatatable("wallet");
+                });
+                options.addEventListener("click", function () {
+                    const walletVal = document.getElementById("wallet").value;
+                    setLocalWallet(walletVal);
+                    window.location.href = "html/options.html";
+                });
+                document.body.addEventListener('click', function (e) {
+                    if (e.target.tagName.toLowerCase() === 'td') {
+                        e.stopPropagation();
+                        e.stopImmediatePropagation();
+                        let walletVal = $(e.target).find('.rwallet').attr("data-full");
+                        let nameVal = $(e.target).find('.name').text();
+                        if (!isEmpty(nameVal)) {
+                            copyContent(nameVal, "name");
+                        } else if (!isEmpty(walletVal)) {
+                            copyContent(walletVal, "wallet");
+                        }
+                    } else if (e.target.className === "photo") {
+                        let id = $(e.target).closest('tr').find('.id').text();
+                        loadDragoPopup(id);
+                    }
+                }, false);
+            });
+        </script>
+    </body>
+</html>
