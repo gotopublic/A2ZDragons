@@ -5,7 +5,6 @@ Operation
 The website running based on HTML & Javascript while using localstorage space for data storage.
 
 Features
-Index.html :
 1. Display all information for the total and rental period.
 2. Display statistics per NFT for the total and rental period.
 3. Display extra information for each NFT by clicking on its corresponding image.
