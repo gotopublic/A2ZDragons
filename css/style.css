@@ -52,7 +52,7 @@
 td:has(> .rwallet), td:has(> .owallet), td:has(> .name) {
     cursor: copy;
 }
-.name{
+#optionsDatatable > tbody  > tr > td > div[contenteditable="true"]{
     cursor:text;
 }
 .copy{
