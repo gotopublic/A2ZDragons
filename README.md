@@ -4,7 +4,7 @@ An HTML page to manage the Dragons of the League Of Kingdoms Game
 Operation : 
 The website running based on HTML & Javascript while using localstorage space for data storage.
 
-Safety 
+Safety : 
 No wallet connection 100% safe
 
 Features
