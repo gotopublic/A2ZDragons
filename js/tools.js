@@ -934,7 +934,7 @@ openDragoDatatable = async function (wallet) {
         if (i === length - 1) {
             rentDragonsNumber = await countRentalDragons(wallet);
             avSuccessRate = parseFloat(parseFloat(sumSuccessRate) / parseInt(rentDragonsNumber)).toFixed(2);
-            totalData = [{label: "Dragons Number", val: length}, {label: "Total DSA", val: totalDSAEarned}, {label: "Total Owner DSA", val: totalTotalOwnerProfit}, {label: "Total Rental Times", val: totalTotalRentalTimes}, {label: "Total Gathering Times", val: totalTotalMiningTimes}, {label: "Total UnclaimedProfit Profit", val: totalUnclaimedProfit}, {label: "Total Cost", val: Math.round(rentTotalCost)}, {label: "Total Used", val: Math.round(rentTotalUsed)}];
+            totalData = [{label: "Dragons Number", val: length}, {label: "Total DSA", val: totalDSAEarned}, {label: "Total Owner DSA", val: totalTotalOwnerProfit}, {label: "Total Rental Times", val: totalTotalRentalTimes}, {label: "Total Gathering Times", val: totalTotalMiningTimes}, {label: "Total Unclaimed Profit", val: totalUnclaimedProfit}, {label: "Total Cost", val: Math.round(rentTotalCost)}, {label: "Total Used", val: Math.round(rentTotalUsed)}];
             rentalData = [{label: "Dragons Number", val: rentDragonsNumber}, {label: "Total DSA", val: rentTotalDsaEarned}, {label: "Total Owner DSA", val: rentOwnerTotalProfit}, {label: "Total Daily DSA", val: rentTotalDailyMined}, {label: "Total Daily Owner DSA", val: Math.round(rentOwnerDailyMined)}, {label: "Total Gathering Times", val: rentTotalMiningTimes}, {label: "Average Success Rate", val: avSuccessRate + ' %'}];
         }
     }
