@@ -4,6 +4,9 @@ An HTML page to manage the Dragons of the League Of Kingdoms Game
 Operation : 
 The website running based on HTML & Javascript while using localstorage space for data storage.
 
+Safety 
+No wallet connection 100% safe
+
 Features
 1. Display all information for the total and rental period.
 2. Display statistics per NFT for the total and rental period.
