@@ -81,7 +81,7 @@ loadDragoPopup = async function (dragoId) {
         let id = dragoDetails.drago.tokenId;
         let image = "https://lok-nft.leagueofkingdoms.com/api/card/drago/" + id;
         let genesis = dragoDetails.drago.filter.genesis ? "Yes" : "No";
-        let type = dragoDetails.drago.grade === 0 ? "Normal" : "Legendary";
+        let type = dragoDetails.drago.grade === 0 ? "Normal" : "Legendary " + dragoDetails.drago.grade;
         let breed = dragoDetails.drago.breed;
         let fusion = dragoDetails.drago.fusion;
         let isOnRental = !isEmpty(dragoDetails.drago.rent.to) ? "Yes" : "No";
@@ -104,7 +104,7 @@ loadDragoPopup = async function (dragoId) {
         
         if (!isEmpty(dragoId)) {
             $('<div id="dialog"></div>').appendTo('body').append('<div class="imgPopupWrapper"><img src="' + image + '" class="imgPopup"></div><div class="dialogContainer">\n\
-            <div class="leftDialog"><div class="dialogRow">Genesis: ' + genesis + '</div><div class="dialogRow">Type: ' + type + ' ' + parts.legendary + '</div>\n\
+            <div class="leftDialog"><div class="dialogRow">Genesis: ' + genesis + '</div><div class="dialogRow">Type: ' + type + '</div>\n\
             <div class="dialogRow">Breed: ' + breed + '</div><div class="dialogRow">Fusion: ' + fusion + '</div>\n\
             <div class="dialogRow">Parts: (Aqua: ' + parts.aqua + ' Dark: ' + parts.dark + ' Fire: ' + parts.fire + ' Light: ' + parts.light + ' Terra: ' + parts.terra + ')</div>\n\
             <div class="dialogRow">Views: ' + views + '</div><div class="dialogRow">On Rental: ' + isOnRental + '</div>'+onRentalWallet+'</div>\n\
