@@ -803,7 +803,7 @@ isNumber = function (value) {
 };
 
 getDailyDSA = function (currentDSA, gatheringDays) {
-    return isNumber(currentDSA) && isNumber(gatheringDays) ? Math.round(Number((Number(currentDSA) / Number(gatheringDays)))) : "";
+    return isNumber(currentDSA) && isNumber(gatheringDays) ? Math.round(Number((Number(currentDSA) / Number(gatheringDays)))) : 0;
 };
 
 hideWallets = function () {
