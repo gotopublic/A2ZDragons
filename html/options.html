@@ -16,14 +16,20 @@
     </head>
     <body>
         <div id="top">
+            <input type="file" id="selectOptions" accept="application/json" style="display:none;"/>
+            <input type="button" class="topButton" id="importer" value="Import Options"/>
+            <div id="importInfo"><div id="popupInfo" style="display: none"></div></div>
+            <input type="button" class="topButton" id="exporter" value="Export Options"/>
             <input id="wallet" type="text" placeholder="Paste your wallet here">
-            <input type="button" id="rentalCheckButton" value="Save & Back"/>
-            <input type="button" id="optionsButton" value="Rental Options"/>
+            <input type="button" class="topButton" id="rentalCheckButton" value="Save & Back"/>
+            <input type="button" class="topButton" id="optionsButton" value="Rental Options"/>
         </div>
         <table id="optionsDatatable" class="display nowrap" cellspacing="0" style="width:100%; margin-bottom:2rem;"></table>
         <div id="popupMessage" style="display:none"></div>
         <script>
             document.addEventListener("DOMContentLoaded", function () {
+                let importer = document.getElementById("importer");
+                let exporter = document.getElementById("exporter");
                 
                 fillWallet();
                 runOptionsDatatable("wallet");
@@ -61,6 +67,15 @@
                 $('#optionsDatatable').on('init.dt', function () {//miningTimesNumber
                     checkValidInput('optionsDatatable');
                 });
+                importer.addEventListener("click", function (e) {
+                    e.preventDefault();
+                    importOptions();
+                });
+                exporter.addEventListener("click", function (e) {
+                    e.preventDefault();
+                    exportOptions(["dragoOptions", "wallet"]);
+                });
+                addInfoListeners();
             });
         </script>
     </body>
