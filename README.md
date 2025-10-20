@@ -19,3 +19,4 @@ Features
 9. Dynamic update of owner-defined options.
 10. Easily find information about any NFT by typing in the search field.
 11. Import/Export Options for future use in different Browser Profiles.
+12. Undo up to 50 changes in options page with Ctrl+z.
