@@ -71,12 +71,13 @@ dragoInfo = async function (id) {
         "credentials": "omit"
     });
     let info = await dragoDetails.json();
-//    console.log(info);
+    console.log(info);
     return info;
 };
 
 loadDragoPopup = async function (dragoId) {
     const dragoDetails = await dragoInfo(dragoId);
+//    console.log(dragoDetails);
     if (objectLength(dragoDetails) > 0) {
         let id = dragoDetails.drago.tokenId;
         let image = "https://lok-nft.leagueofkingdoms.com/api/card/drago/" + id;
@@ -100,14 +101,14 @@ loadDragoPopup = async function (dragoId) {
         let totalRental = dragoDetails.drago.rent.stats.totalRental;
         let unclaimedProfit = dragoDetails.drago.rent.stats.unclaimedProfit;
 
-        let onRentalWallet = isOnRental==="Yes" ? '<div class="dialogRow">Rentee Wallet: ' + hidePopupWallet(dragoDetails.drago.rent.to) + '</div>' : "";
-        
+        let onRentalWallet = isOnRental === "Yes" ? '<div class="dialogRow">Rentee Wallet: ' + hidePopupWallet(dragoDetails.drago.rent.to) + '</div>' : "";
+
         if (!isEmpty(dragoId)) {
             $('<div id="dialog"></div>').appendTo('body').append('<div class="imgPopupWrapper"><img src="' + image + '" class="imgPopup"></div><div class="dialogContainer">\n\
             <div class="leftDialog"><div class="dialogRow">Genesis: ' + genesis + '</div><div class="dialogRow">Type: ' + type + '</div>\n\
             <div class="dialogRow">Breed: ' + breed + '</div><div class="dialogRow">Fusion: ' + fusion + '</div>\n\
             <div class="dialogRow">Parts: (Aqua: ' + parts.aqua + ' Dark: ' + parts.dark + ' Fire: ' + parts.fire + ' Light: ' + parts.light + ' Terra: ' + parts.terra + ')</div>\n\
-            <div class="dialogRow">Views: ' + views + '</div><div class="dialogRow">On Rental: ' + isOnRental + '</div>'+onRentalWallet+'</div>\n\
+            <div class="dialogRow">Views: ' + views + '</div><div class="dialogRow">On Rental: ' + isOnRental + '</div>' + onRentalWallet + '</div>\n\
             <div class="rightDialog"><div class="dialogRow">Parents: ' + parents + '</div><div class="dialogRow">Total DSA: ' + totalDSA + '</div>\n\
             <div class="dialogRow">Total Gathering: ' + totalGathering + '</div><div class="dialogRow">Total Profit: ' + totalProfit + '</div>\n\
             <div class="dialogRow">Total Rental Times: ' + totalRental + '</div><div class="dialogRow">Rental DSA: ' + currentDSA + '</div>\n\
@@ -574,7 +575,7 @@ openOptionsDatatable = async function (wallet) {
         let row = 0;
         for (let i = 0; i < length; i++) {
             datatableList[row] = [
-                '<div class="image"><img class="photo" loading="lazy" src= "' + getDragoImage(dragoList[i].id) + '" alt="Drago Image"/></div>',
+                '<div class="image"><img class="photo" loading="auto" src= "' + getDragoImage(dragoList[i].id) + '" alt="Drago Image"/></div>',
                 '<div class="id">' + dragoList[i].id + '</div>',
                 '<div class="type">' + dragoList[i].type + '</div>',
                 '<div class="cost" contenteditable="true" spellcheck="false">' + dragoList[i].cost + '</div>',
@@ -643,8 +644,11 @@ openOptionsDatatable = async function (wallet) {
                 {searchPanes: {header: cCost, show: false}, targets: [3]},
                 {searchPanes: {header: cDsaUsed, show: false}, targets: [4]},
                 {searchPanes: {header: cRenteeWallet, show: true}, targets: [5],
-                    render: function (data, type, row, meta) {
-                        return $(data).attr('data-full');
+                    render: function (data, type, row) {
+                        if (type === 'sp' || type === 'filter') {
+                            return $('<div>').html(data).text();
+                        }
+                        return data;
                     }
                 },
                 {searchPanes: {header: cName, show: true}, targets: [6]},
@@ -830,7 +834,7 @@ hideWallet = function (wallet) {
 
 hidePopupWallet = function (wallet) {
     const fullText = wallet.trim();
-    return fullText.length > 15 ? '...'+fullText.slice(30): "";
+    return fullText.length > 15 ? '...' + fullText.slice(30) : "";
 };
 
 getRentDailyMiningTimes = function (rentMiningTimes, rentalDays) {
@@ -945,7 +949,7 @@ openDragoDatatable = async function (wallet) {
                 !isEmpty(dragoList[x].minedRate) && dragoList[x].minedRate >= 80 && !isEmpty(dragoList[x].wallet) ?
                 '<div class="successRate">' + dragoList[x].minedRate + ' %</div>' : '<div class="successRate">' + dragoList[x].minedRate + ' %</div>';
         datatableList[x] = [
-            '<div class="image"><img  class="photo" loading="lazy" src= "' + getDragoImage(dragoList[x].id) + '" alt="Drago Image"/></div>',
+            '<div class="image"><img  class="photo" loading="auto" src= "' + getDragoImage(dragoList[x].id) + '" alt="Drago Image"/></div>',
             '<div class="id">' + dragoList[x].id + '</div>',
             '<div class="level">' + dragoList[x].level + '</div>',
             '<div class="type">' + dragoList[x].type + '</div>',
@@ -1255,7 +1259,7 @@ localExists = function (name) {
 getLocal = function (name) {
     let val = localStorage.getItem(name);
     if (!isEmpty(val)) {
-        return val;
+        return smartParse(val);
     }
     return null;
 };
@@ -1286,7 +1290,7 @@ createLocalJSONData = function (name, dragoList) {
 readLocalJSONData = function (name) {
     if (localExists(name)) {
         let data = localStorage.getItem(name);
-        let obj = JSON.parse(data);
+        let obj = (typeof data === "string") ? JSON.parse(data) : data;
         return obj;
     }
     return null;
@@ -1298,13 +1302,110 @@ createLocalDragoOptions = function (name, dragoList) {
         let obj = {id: dragoList[i].id, name: dragoList[i].name, dsaLevel: dragoList[i].dsaLevel, mTimes: dragoList[i].mTimes, cost: dragoList[i].cost, used: dragoList[i].used};
         dragons.push(obj);
     }
-    /*create an array with object like {id:id, name:name, dsaLevel : dsaLevel, mTimes:mTimes}*/
-    if (createLocalJSONData(name, dragons)) {
-        return true;
-    }
-    ;
-    return false;
+    return createLocalJSONData(name, dragons) ? true : false;
 };
+smartParse = function (jsonString) {
+    // 1. Trim whitespace and remove BOM
+    let cleanedString = jsonString.trim();
+    if (cleanedString.charCodeAt(0) === 0xFEFF) {
+        cleanedString = cleanedString.slice(1);
+    }
+    // Handle empty strings
+    if (cleanedString === "") {
+        return null;
+    }
+    // 2. Try to parse as JSON
+    try {
+        return JSON.parse(cleanedString);
+    } catch (error) {
+        // 3. If parsing fails, decide what to do.
+        // Check if it was *supposed* to be a JSON object/array.
+        if (cleanedString.startsWith('{') || cleanedString.startsWith('[')) {
+            // It looks like JSON but is broken. Return false to indicate failure.
+            console.error("Failed to parse malformed JSON:", cleanedString);
+            return false;
+        } else {
+            return cleanedString;
+        }
+    }
+};
+
+importOptions = async function () {
+    let selector = document.getElementById("selectOptions");
+    if (!selector) {
+        console.error("Import file input #selectOptions not found!");
+        return;
+    }
+    selector.click();
+
+    selector.addEventListener("change", function (e) {
+        const files = e.target.files;
+        if (!files || files.length === 0) {
+            return; // No file selected
+        }
+        const file = files[0];
+        const reader = new FileReader();
+        reader.readAsText(file);
+        reader.onload = function () {
+            const result = JSON.parse(reader.result); // parsed file
+            for (let i = 0; i < result.length; i++) {
+                let name = result[i].name;
+                let data = result[i].data;
+                localStorage.setItem(name, JSON.stringify(data));
+                console.log(`Saved ${result[i].name} (${data.length} items)`);
+            }
+        };
+    });
+};
+
+downloadObjectAsJson = function (exportObj, exportName) {
+    const json = JSON.stringify(exportObj, null, 2);
+    const blob = new Blob([json], {type: "application/json"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = exportName;
+    a.click();
+    URL.revokeObjectURL(url); // clean up
+};
+exportOptions = function (arrayOfLocalNames) {
+    if (!isEmpty(arrayOfLocalNames)) {
+        let length = arrayOfLocalNames.length;
+        let localArray = new Array();
+        for (let i = 0; i < length; i++) {
+            let localName = arrayOfLocalNames[i];
+            let localData = localStorage.getItem(localName);
+            if (localData === null) {
+                popupMessage("No Options for Export.", 5);
+            } else {
+                let parsedData = smartParse(localData);
+                let obj = new Object();
+                obj.name = localName;
+                obj.data = parsedData;
+                localArray.push(obj);
+            }
+        }
+        if (!isEmpty(localArray)) {
+            downloadObjectAsJson(localArray, "exportedDragoOptions");
+        } else {
+            popupMessage("No Options for Export.", 5);
+        }
+//        console.log(localArray);
+    } else {
+        console.log("Empty Local Storage Names");
+    }
+};
+addInfoListeners = function () {
+    $("#importInfo").mouseover(function () {
+        $("#popupInfo").text("Press the Export button to save your options to a JSON file in your machine.\nPress the Import button to load your saved options from a JSON file.\nWith this function you can easy transfer your saved options between different Browser profiles.\nBe careful, the data for export is the already saved data in your Browser LocalStorage without \nany changes that you made in the current window.");
+        $("#popupInfo").css("display", "block");
+    }).mouseout(function () {
+        $("#popupInfo").text("");
+        $("#popupInfo").css("display", "none");
+    });
+};
+
+
 let lastPopup = {
     message: null,
     timestamp: 0
