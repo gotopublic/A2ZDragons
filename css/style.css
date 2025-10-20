@@ -101,11 +101,11 @@ tbody > tr, tfoot > tr{
     display: flex;
     align-self: center;
 }
-#optionsButton, #rentalCheckButton{
+.topButton{
     height: 25px;
     align-self: center;
     cursor: pointer;
-    margin-left: 10px;
+    margin: 0 10px 0 10px;
 }
 .dtsp-searchPanes{
     background-color: #fff !important;
@@ -125,6 +125,27 @@ table.dataTable tfoot {
 }
 .colSearchPanes, .searchPanes, .dtsp-panesContainer, .dtsp-searchPanes{
     width: inherit !important;
+}
+#importInfo{
+    width: 30px;
+    height: 30px;
+    min-width: 30px;
+    min-height: 30px;
+    background-image: url("../images/info.png");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-position: center center;
+    cursor: default;
+}
+#popupInfo{
+    position: absolute;
+    background-color: white;
+    color: midnightblue;
+    width: 20vw;
+    display : block;
+    padding: 10px;
+    line-height: 20px;
+    z-index: 10001;
 }
 @keyframes fadein {
     from {
@@ -181,7 +202,7 @@ table.dataTable tfoot {
     }
 }
 @media screen and (max-width: 860px) {
-    .topBar, #datProf {
+    #dateId, #contProfit, #top, .dt-length {
         display:-webkit-flex !important;
         display: flex !important;
         -webkit-flex-direction: column !important;
@@ -190,25 +211,15 @@ table.dataTable tfoot {
         justify-content: center !important;
         align-items: center !important;
         flex-wrap: nowrap !important;
+        text-align: center;
     }
-    .dt-buttons, .dt-length, .dt-search, .dt-paging.paging_simple_numbers{
+    .dt-buttons, .dt-length, .dt-search, .dt-paging.paging_simple_numbers, #wallet, .topButton, #importInfo{
         margin-bottom: 10px;
     }
-}
-@media screen and (max-width: 520px) {
-    #dateId, #contProfit, #top {
-        display:-webkit-flex !important;
-        display: flex !important;
-        -webkit-flex-direction: column !important;
-        flex-direction: column !important;
-        flex-flow: column !important;
-        justify-content: center !important;
-        align-items: center !important;
-        flex-wrap: nowrap !important;
+    .dt-length{
+        margin-left: 10px;
     }
-    .dt-buttons, .dt-length, .dt-search, .dt-paging.paging_simple_numbers, #wallet, #rentalCheckButton, #optionsButton{
-        margin-bottom: 10px;
-    }
+
     #wallet{
         min-width: 90%;
     }
@@ -216,7 +227,12 @@ table.dataTable tfoot {
         width: auto;
         height: auto;
     }
+    [aria-label="pagination"]{
+        margin: auto;
+        width: 50%;
+    }
 }
+
 .image > img{
     width: 100%;
     height: auto;
@@ -271,7 +287,7 @@ table.dataTable tfoot {
 }
 #DataTables_Table_0_wrapper .dt-scroll-body {
     height: auto !important;
-    max-height: none !important; 
+    max-height: none !important;
     overflow: visible !important;
     overflow-y: visible !important;
 }
