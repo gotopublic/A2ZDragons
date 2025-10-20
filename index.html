@@ -16,9 +16,13 @@
     </head>
     <body>
         <div id="top">
+            <input type="file" id="selectOptions" accept="application/json" style="display:none;"/>
+            <input type="button" class="topButton" id="importer" value="Import Options"/>
+            <div id="importInfo"><div id="popupInfo" style="display: none"></div></div>
+            <input type="button" class="topButton" id="exporter" value="Export Options"/>
             <input id="wallet" type="text" placeholder="Paste your wallet here">
-            <input type="button" id="rentalCheckButton" value="Rental Check"/>
-            <input type="button" id="optionsButton" value="Rental Options"/>
+            <input type="button" class="topButton" id="rentalCheckButton" value="Rental Check"/>
+            <input type="button" class="topButton" id="optionsButton" value="Rental Options"/>
         </div>
         <table id="dragoDatatable" class="display nowrap" cellspacing="0" style="width:100%; margin-bottom:2rem;"></table>
         <div id="popupMessage" style="display:none"></div>
@@ -26,6 +30,8 @@
             document.addEventListener("DOMContentLoaded", function () {
                 let rentalCheck = document.getElementById("rentalCheckButton");
                 let options = document.getElementById("optionsButton");
+                let importer = document.getElementById("importer");
+                let exporter = document.getElementById("exporter");
 
                 fillWallet();
                 runDragoDatatable("wallet");
@@ -53,6 +59,16 @@
                         loadDragoPopup(id);
                     }
                 }, false);
+
+                importer.addEventListener("click", function (e) {
+                    e.preventDefault();
+                    importOptions();
+                });
+                exporter.addEventListener("click", function (e) {
+                    e.preventDefault();
+                    exportOptions(["dragoOptions", "wallet"]);
+                });
+                addInfoListeners();
             });
         </script>
     </body>
