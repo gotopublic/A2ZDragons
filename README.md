@@ -18,3 +18,4 @@ Features
 8. Easy column sorting with one click on the headers.
 9. Dynamic update of owner-defined options.
 10. Easily find information about any NFT by typing in the search field.
+11. Import/Export Options for future use in different Browser Profiles.
