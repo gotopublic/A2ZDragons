@@ -35,7 +35,7 @@ getDragoImage = function (id) {
 WithPromiseAll = async function (promises) {
     return await Promise.all(promises.map((promise) => promise()));
 };
-delay = function (ms) {
+delay = async function (ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 };
 
@@ -473,8 +473,8 @@ optionsDatatableListener = async function (datatable) {
             localList.push(obj);
         }
     }
-    createLocalDragoOptions("dragoOptions", localList);
-    delay(1000);
+    await createLocalDragoOptions("dragoOptions", localList);
+    await delay(500);
 };
 
 runOptionsDatatable = function (walletId) {
@@ -1276,11 +1276,11 @@ removeValFromLocal = function (name, val) {
 clearLocal = function () {
     localStorage.clear();
 };
-createLocalJSONData = function (name, dragoList) {
+createLocalJSONData = async function (name, dragoList) {
     if (dragoList.length > 0) {
         removeLocal(name);
         localStorage.setItem(name, JSON.stringify(dragoList));
-        delay(1000);
+        await delay(500);
         return true;
     } else {
         console.log("empty drago list");
@@ -1295,14 +1295,15 @@ readLocalJSONData = function (name) {
     }
     return null;
 };
-createLocalDragoOptions = function (name, dragoList) {
+createLocalDragoOptions = async function (name, dragoList) {
     let length = dragoList.length;
     let dragons = [];
     for (let i = 0; i < length; i++) {
         let obj = {id: dragoList[i].id, name: dragoList[i].name, dsaLevel: dragoList[i].dsaLevel, mTimes: dragoList[i].mTimes, cost: dragoList[i].cost, used: dragoList[i].used};
         dragons.push(obj);
     }
-    return createLocalJSONData(name, dragons) ? true : false;
+    let created = await createLocalJSONData(name, dragons);
+    return created ? true : false;
 };
 smartParse = function (jsonString) {
     // 1. Trim whitespace and remove BOM
@@ -1337,8 +1338,7 @@ importOptions = async function () {
         return;
     }
     selector.click();
-
-    selector.addEventListener("change", function (e) {
+    selector.addEventListener("change", async function (e) {
         const files = e.target.files;
         if (!files || files.length === 0) {
             return; // No file selected
@@ -1346,13 +1346,25 @@ importOptions = async function () {
         const file = files[0];
         const reader = new FileReader();
         reader.readAsText(file);
-        reader.onload = function () {
+        reader.onload = async function () {
             const result = JSON.parse(reader.result); // parsed file
+            let imported = false;
             for (let i = 0; i < result.length; i++) {
                 let name = result[i].name;
                 let data = result[i].data;
                 localStorage.setItem(name, JSON.stringify(data));
-                console.log(`Saved ${result[i].name} (${data.length} items)`);
+                await delay(500);
+                if (localStorage.getItem(name) === null) {
+                    imported = false;
+                } else {
+                    imported = true;
+                    console.log(`Imported ${result[i].name} (${data.length} items)`);
+                }
+            }
+            if (imported) {
+                popupMessage("The options imported successfully!", 5);
+                await delay(3000);
+                window.location.reload();
             }
         };
     });
