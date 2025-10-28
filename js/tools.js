@@ -365,7 +365,7 @@ getRentalDays = function (startDate, endDate) {
 };
 getMinedRate = function (successRate, dsaMinedFromRentalDay) {
     let result = dsaMinedFromRentalDay / successRate;
-    return isNumber(result) ? (result * 100).toFixed(2) : 0;
+    return isNumberExceptZero(result) ? (result * 100).toFixed(2) : 0;
 };
 isDecimal = function (num) {
     return (num % 1);
@@ -563,7 +563,7 @@ openOptionsDatatable = async function (wallet) {
             name = "", dsaLevel = "", mTimes = "", cost = 0, used = 0;
             if (i === dragoLength - 1) {
                 rentDragonsNumber = await countRentalDragons(wallet);
-                avSuccessRate = parseFloat(parseFloat(sumSuccessRate) / parseInt(rentDragonsNumber)).toFixed(2);
+                avSuccessRate = smartFixed(parseFloat(parseFloat(sumSuccessRate) / parseInt(rentDragonsNumber)));
                 totalData = [{label: "Dragons Number", val: dragoLength}, {label: "Total DSA", val: totalDSAEarned}, {label: "Total Owner DSA", val: totalTotalOwnerProfit}, {label: "Total Rental Times", val: totalTotalRentalTimes}, {label: "Total Gathering Times", val: totalTotalMiningTimes}, {label: "Total Unclaimed Profit", val: totalUnclaimedProfit}, {label: "Total Cost", val: Math.round(rentTotalCost)}, {label: "Total Used", val: Math.round(rentTotalUsed)}];
                 rentalData = [{label: "Dragons Number", val: rentDragonsNumber}, {label: "Total DSA", val: rentTotalDsaEarned}, {label: "Total Owner DSA", val: rentOwnerTotalProfit}, {label: "Total Daily DSA", val: rentTotalDailyMined}, {label: "Total Daily Owner DSA", val: Math.round(rentOwnerDailyMined)}, {label: "Total Gathering Times", val: rentTotalMiningTimes}, {label: "Average Success Rate", val: avSuccessRate + ' %'}];
             }
@@ -805,6 +805,14 @@ isNumber = function (value) {
         return false;
     return isFinite(Number(s));                         // covers "2e5", "-3.14", etc.
 };
+isNumberExceptZero = function (value) {
+    let converted = Number(value);
+    return isNumber(value) && converted !== 0 ? true : false;                         // covers "2e5", "-3.14", etc.
+};
+
+smartFixed = function(value){
+    return isNumberExceptZero(value) ? Number(value).toFixed(2) : 0;
+};
 
 getDailyDSA = function (currentDSA, gatheringDays) {
     return isNumber(currentDSA) && isNumber(gatheringDays) && parseInt(gatheringDays) > 0 ? Math.round(Number((Number(currentDSA) / Number(gatheringDays)))) : 0;
@@ -937,7 +945,7 @@ openDragoDatatable = async function (wallet) {
 
         if (i === length - 1) {
             rentDragonsNumber = await countRentalDragons(wallet);
-            avSuccessRate = parseFloat(parseFloat(sumSuccessRate) / parseInt(rentDragonsNumber)).toFixed(2);
+            avSuccessRate = smartFixed(parseFloat(parseFloat(sumSuccessRate) / parseInt(rentDragonsNumber)));
             totalData = [{label: "Dragons Number", val: length}, {label: "Total DSA", val: totalDSAEarned}, {label: "Total Owner DSA", val: totalTotalOwnerProfit}, {label: "Total Rental Times", val: totalTotalRentalTimes}, {label: "Total Gathering Times", val: totalTotalMiningTimes}, {label: "Total Unclaimed Profit", val: totalUnclaimedProfit}, {label: "Total Cost", val: Math.round(rentTotalCost)}, {label: "Total Used", val: Math.round(rentTotalUsed)}];
             rentalData = [{label: "Dragons Number", val: rentDragonsNumber}, {label: "Total DSA", val: rentTotalDsaEarned}, {label: "Total Owner DSA", val: rentOwnerTotalProfit}, {label: "Total Daily DSA", val: rentTotalDailyMined}, {label: "Total Daily Owner DSA", val: Math.round(rentOwnerDailyMined)}, {label: "Total Gathering Times", val: rentTotalMiningTimes}, {label: "Average Success Rate", val: avSuccessRate + ' %'}];
         }
