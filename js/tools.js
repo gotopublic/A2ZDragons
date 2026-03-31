@@ -645,9 +645,6 @@ openOptionsDatatable = async function (wallet) {
                 {searchPanes: {header: cDsaUsed, show: false}, targets: [4]},
                 {searchPanes: {header: cRenteeWallet, show: true}, targets: [5],
                     render: function (data, type, row) {
-                        if (type === 'sp' || type === 'filter') {
-                            return $('<div>').html(data).text();
-                        }
                         return $(data).attr('data-full');
                     }
                 },
@@ -1027,7 +1024,7 @@ openDragoDatatable = async function (wallet) {
                 {searchPanes: {header: cLevel, show: false}, targets: [2]},
                 {searchPanes: {header: cType, show: false}, targets: [3]},
                 {searchPanes: {header: cRenteeWallet, show: true}, targets: [4],
-                    render: function (data, type, row, meta) {
+                    render: function (data, type, row) {
                         return $(data).attr('data-full');
                     }
                 },
