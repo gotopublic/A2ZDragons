@@ -648,7 +648,7 @@ openOptionsDatatable = async function (wallet) {
                         if (type === 'sp' || type === 'filter') {
                             return $('<div>').html(data).text();
                         }
-                        return data;
+                        return $(data).attr('data-full');
                     }
                 },
                 {searchPanes: {header: cName, show: true}, targets: [6]},
